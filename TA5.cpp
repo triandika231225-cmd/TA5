@@ -29,23 +29,39 @@ Node* insert(Node* root, string nama, int nilai) {
     return root;
 }
 
-void printRanking(Node* root, int& rank) {
+void printRanking(Node* root) {
     if (root != nullptr) {
-        printRanking(root->left, rank);
-        cout << rank << "." << root->nama << " Nilai: " << root->nilai << "\n";
-        rank++;
-        printRanking(root->right, rank);
+        printRanking(root->left);
+        cout << root->nama << " Nilai: " << root->nilai << "\n";
+        printRanking(root->right);
     }
 }
+
+void search(Node* root, int nilai) {
+    if (root == nullptr) {
+        cout << "Nilai " << nilai << " tidak ditemukan.\n";
+        return;
+    }
+    if (root->nilai == nilai) {
+        cout << "Nama: " << root->nama << ", Nilai: " << root->nilai << "\n";
+        return;
+    }
+    if (nilai < root->nilai) {
+        search(root->left, nilai);
+    } else {
+        search(root->right, nilai);
+    }
+} 
 
 int main() {
     Node* root = nullptr;
     int pilih;
-    int rank = 1;
     
 do {
     cout << "1. Tambah data siswa\n";
-    cout << "2. Tampilkan ranking dan keluar\n";
+    cout << "2. Cari data siswa\n";
+    cout << "3. Tampilkan ranking\n";
+    cout << "4. Keluar\n";
     cout << "Pilih: ";
     cin >> pilih;
         
@@ -61,9 +77,18 @@ do {
 
         root = insert(root, nama, nilai);
     }
-} while (pilih != 2);
+    if (pilih == 2) {
+        int nilai;
+        cout << "Masukkan nilai siswa: ";
+        cin >> nilai;
+        search(root,nilai);
+
+    }
+    if (pilih == 3) {
+        cout << "RANKING SISWA\n";
+        printRanking(root);
+    }
+} while (pilih != 4);
  
-cout << "RANKING SISWA\n";
-printRanking(root, rank);
 return 0;
 }
